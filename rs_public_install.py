@@ -250,8 +250,10 @@ else:
 if is_gh:
     logger.info("### gh - github authentication")
     install_cmd("gh", "brew install gh")
-    run("gh auth login -w -p ssh -h github.com")
-    assert get_run_returncode("gh auth status") == 0
+    # `gh auth status` = 0 if logged in = 1 if not
+    if get_run_returncode("gh auth status") != 0:
+        run("gh auth login -w -p ssh -h github.com")
+        assert get_run_returncode("gh auth status") == 0
     logger.info("Login gh to github.com: True")
 
 
