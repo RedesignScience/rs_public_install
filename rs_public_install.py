@@ -132,7 +132,7 @@ def clone_sync_checkout(package, version=None):
     default_branch_name = matches[0].group(1)
     run("git checkout {}".format(default_branch_name))
 
-    run("git fetch --prune --tags")
+    run("git fetch --prune --tags --force")
     run("git pull")
 
     if version is not None:
