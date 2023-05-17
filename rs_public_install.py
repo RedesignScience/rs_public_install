@@ -165,15 +165,15 @@ logger.info("Installing to env: {}".format(env))
 top_dir = path_resolve(args[1]) if len(args) >= 2 else path_resolve("rs")
 logger.info("Installing to top_dir: {}".format(top_dir))
 
+rs_install_version = None
 if len(args) < 3:
     logger.info(
         "Defaulting to latest rs_install_version. "
         "To specify, use: rs_install.py <env> <top_dir> <rs_install_version>"
     )
-    rs_install_version = None
 else:
-    rs_install_version = args[2]
-    logger.info("Installing rs_install_version: {}".format(rs_install_version))
+    if args[2]:
+        rs_install_version = args[2]
 
 
 # Prepare top_dir for installation
@@ -204,9 +204,9 @@ print(
 
 Install the R_S Toolkit on Ubuntu or Mac
 
-rs_install_version: {}
 R_S package directory: {}
 Python conda environment: `{}`
+rs_install version: {}
 
 """.format(
         rs_install_version, top_dir, env, name
@@ -258,7 +258,9 @@ if is_gh:
 
 
 # Download rs_install first for package.yaml and env.yaml for conda
-logger.info("### Github install RS_INSTALL %s", rs_install_version)
+logger.info("######################################")
+version_str = rs_install_version if rs_install_version else "latest"
+logger.info("### R_S package: rs_install %s", version_str)
 clone_sync_checkout("rs_install", rs_install_version)
 
 rs_install_py = path_join(top_dir, "rs_install/rs_install.py")
