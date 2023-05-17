@@ -165,15 +165,15 @@ logger.info("Installing to env: {}".format(env))
 top_dir = path_resolve(args[1]) if len(args) >= 2 else path_resolve("rs")
 logger.info("Installing to top_dir: {}".format(top_dir))
 
-version = None
-if len(args) < 3:
+if len(args) == 3 and args[2]:
+    rs_install_version = args[2]
+else:
     logger.info(
         "Defaulting to latest rs_install_version. "
         "To specify, use: rs_install.py <env> <top_dir> <version>"
     )
-else:
-    if args[2]:
-        version = args[2]
+    rs_install_version = None
+version_str = rs_install_version if rs_install_version else "latest"
 
 
 # Prepare top_dir for installation
@@ -197,7 +197,6 @@ logger.addHandler(streamHandler)
 
 
 # Greeting message
-version_str = version if version else "latest"
 print(
     """
 
@@ -260,15 +259,14 @@ if is_gh:
 
 # Download rs_install first for package.yaml and env.yaml for conda
 logger.info("######################################")
-version_str = version if version else "latest"
 logger.info("### R_S package: rs_install %s", version_str)
-clone_sync_checkout("rs_install", version)
+clone_sync_checkout("rs_install", rs_install_version)
 
 
 # Now run the full install
 rs_install_py = path_join(top_dir, "rs_install/rs_install.py")
 cmd = "python {} {} {}".format(rs_install_py, env, top_dir)
-if version:
-    cmd += f" {version}"
+if rs_install_version:
+    cmd += f" {rs_install_version}"
 
 run(cmd)
