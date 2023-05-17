@@ -133,6 +133,7 @@ def clone_sync_checkout(package, version=None):
     run("git checkout {}".format(default_branch_name))
     if is_gh:
         run("gh repo sync")
+        run("git fetch --prune --tags")
     else:
         run("git fetch")
 
