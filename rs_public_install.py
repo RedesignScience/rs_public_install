@@ -266,6 +266,6 @@ clone_sync_checkout("rs_install", rs_install_version)
 rs_install_py = path_join(top_dir, "rs_install/rs_install.py")
 cmd = "python {} {} {}".format(rs_install_py, env, top_dir)
 if rs_install_version:
-    cmd += f" {rs_install_version}"
+    cmd += " " + "rs_install_version"
 
 run(cmd)
